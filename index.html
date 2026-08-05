@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paint Calculator | DIY Calculator Hub</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --color-bg: #f4f6f8;
+      --color-surface: #ffffff;
+      --color-primary: #2563eb;
+      --color-primary-hover: #1d4ed8;
+      --color-text: #1e293b;
+      --color-text-muted: #64748b;
+      --color-border: #e2e8f0;
+      --color-accent: #0f766e;
+      --color-accent-bg: #ecfdf5;
+      --radius: 12px;
+      --shadow: 0 4px 24px rgba(15, 23, 42, 0.08);
+      --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 3rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .brand {
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      margin-bottom: 0.25rem;
+    }
+
+    header h1 {
+      font-size: clamp(1.75rem, 5vw, 2.25rem);
+      font-weight: 700;
+      color: var(--color-text);
+    }
+
+    header p {
+      color: var(--color-text-muted);
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .card {
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card h2 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 520px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .field.full-width {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--color-text);
+    }
+
+    .label-hint {
+      font-weight: 400;
+      color: var(--color-text-muted);
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+      color: var(--color-text);
+      background: var(--color-surface);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    input[type="number"]:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    .input-group {
+      display: flex;
+      align-items: stretch;
+    }
+
+    .input-group input {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      flex: 1;
+    }
+
+    .input-suffix {
+      display: flex;
+      align-items: center;
+      padding: 0 0.85rem;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-left: none;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    button {
+      flex: 1;
+      min-width: 140px;
+      padding: 0.75rem 1.25rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: var(--color-primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--color-primary-hover);
+    }
+
+    .btn-secondary {
+      background: var(--color-bg);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--color-border);
+    }
+
+    .results {
+      display: none;
+    }
+
+    .results.visible {
+      display: block;
+    }
+
+    .result-grid {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      background: var(--color-bg);
+      border-radius: 8px;
+      gap: 1rem;
+    }
+
+    .result-row.highlight {
+      background: var(--color-accent-bg);
+      border: 1px solid #99f6e4;
+    }
+
+    .result-label {
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+    }
+
+    .result-value {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--color-text);
+      text-align: right;
+    }
+
+    .result-row.highlight .result-value {
+      font-size: 1.25rem;
+      color: var(--color-accent);
+    }
+
+    .error-message {
+      display: none;
+      margin-top: 1rem;
+      padding: 0.75rem 1rem;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      color: #b91c1c;
+      font-size: 0.9rem;
+    }
+
+    .error-message.visible {
+      display: block;
+    }
+
+    .info-section h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--color-text);
+    }
+
+    .info-section p,
+    .info-section li {
+      font-size: 0.925rem;
+      color: var(--color-text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .info-section ul,
+    .info-section ol {
+      padding-left: 1.25rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .info-section li {
+      margin-bottom: 0.35rem;
+    }
+
+    .example-box {
+      background: var(--color-bg);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      font-size: 0.925rem;
+      color: var(--color-text-muted);
+      line-height: 1.7;
+    }
+
+    .example-box strong {
+      color: var(--color-text);
+    }
+
+    .disclaimer {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      border-left: 3px solid var(--color-border);
+      padding-left: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">DIY Calculator Hub</div>
+      <h1>Paint Calculator</h1>
+      <p>Estimate how much paint you need for your room walls.</p>
+    </header>
+
+    <main>
+      <section class="card" aria-labelledby="inputs-heading">
+        <h2 id="inputs-heading">Room Details</h2>
+        <form id="paint-form" novalidate>
+          <div class="form-grid">
+            <div class="field">
+              <label for="length">Room Length</label>
+              <div class="input-group">
+                <input type="number" id="length" name="length" min="0" step="0.01" placeholder="e.g. 4.5" required>
+                <span class="input-suffix">m</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="width">Room Width</label>
+              <div class="input-group">
+                <input type="number" id="width" name="width" min="0" step="0.01" placeholder="e.g. 3.2" required>
+                <span class="input-suffix">m</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="height">Wall Height</label>
+              <div class="input-group">
+                <input type="number" id="height" name="height" min="0" step="0.01" placeholder="e.g. 2.4" required>
+                <span class="input-suffix">m</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="doors">Number of Doors</label>
+              <input type="number" id="doors" name="doors" min="0" step="1" value="1">
+            </div>
+
+            <div class="field">
+              <label for="windows">Number of Windows</label>
+              <input type="number" id="windows" name="windows" min="0" step="1" value="1">
+            </div>
+
+            <div class="field">
+              <label for="coats">Number of Coats</label>
+              <input type="number" id="coats" name="coats" min="1" step="1" value="2">
+            </div>
+
+            <div class="field full-width">
+              <label for="coverage">
+                Paint Coverage per Litre
+                <span class="label-hint">(typical emulsion: 10 m²/L)</span>
+              </label>
+              <div class="input-group">
+                <input type="number" id="coverage" name="coverage" min="0.1" step="0.1" value="10">
+                <span class="input-suffix">m²/L</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="buttons">
+            <button type="submit" class="btn-primary">Calculate Paint</button>
+            <button type="button" class="btn-secondary" id="reset-btn">Reset</button>
+          </div>
+
+          <div class="error-message" id="error-message" role="alert"></div>
+        </form>
+      </section>
+
+      <section class="card results" id="results-panel" aria-labelledby="results-heading">
+        <h2 id="results-heading">Your Estimate</h2>
+        <div class="result-grid">
+          <div class="result-row">
+            <span class="result-label">Total Wall Area</span>
+            <span class="result-value" id="result-wall-area">—</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Deduction for Doors / Windows</span>
+            <span class="result-value" id="result-deduction">—</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Net Paintable Area</span>
+            <span class="result-value" id="result-net-area">—</span>
+          </div>
+          <div class="result-row highlight">
+            <span class="result-label">Total Recommended Litres of Paint</span>
+            <span class="result-value" id="result-litres">—</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="card info-section">
+        <h3>How this calculator works</h3>
+        <p>This tool estimates the amount of paint needed to cover the walls of a rectangular room. It follows these steps:</p>
+        <ol>
+          <li><strong>Calculate total wall area</strong> — For a rectangular room, the four walls add up to: 2 × (Length + Width) × Height.</li>
+          <li><strong>Subtract openings</strong> — Each door is assumed to cover 2 m² and each window 1.5 m². These areas are deducted from the total wall area.</li>
+          <li><strong>Account for multiple coats</strong> — The net paintable area is multiplied by the number of coats you plan to apply.</li>
+          <li><strong>Convert to litres</strong> — The total coated area is divided by the paint's coverage rate (m² per litre).</li>
+          <li><strong>Add a waste buffer</strong> — A 10% extra allowance is added to cover spills, touch-ups, and uneven surfaces.</li>
+        </ol>
+      </section>
+
+      <section class="card info-section">
+        <h3>Worked example</h3>
+        <div class="example-box">
+          <p>Suppose you have a room that is <strong>4 m long</strong>, <strong>3 m wide</strong>, and <strong>2.4 m high</strong>, with <strong>1 door</strong>, <strong>1 window</strong>, applying <strong>2 coats</strong> of paint with a coverage of <strong>10 m²/L</strong>:</p>
+          <ul>
+            <li>Total wall area = 2 × (4 + 3) × 2.4 = <strong>33.6 m²</strong></li>
+            <li>Deductions = (1 × 2) + (1 × 1.5) = <strong>3.5 m²</strong></li>
+            <li>Net paintable area = 33.6 − 3.5 = <strong>30.1 m²</strong></li>
+            <li>Total coated area = 30.1 × 2 coats = <strong>60.2 m²</strong></li>
+            <li>Litres before buffer = 60.2 ÷ 10 = <strong>6.02 L</strong></li>
+            <li>With 10% buffer = 6.02 × 1.10 = <strong>6.62 L</strong> (round up to <strong>7 litres</strong> when buying)</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="card info-section">
+        <h3>Disclaimer</h3>
+        <p class="disclaimer">
+          Paint coverage varies significantly between brands, finishes (matte, satin, gloss), and surface types (new plaster, previously painted, textured walls). Always check the coverage figure on your chosen paint tin and consider buying slightly more than calculated. This calculator provides an estimate only and should not replace manufacturer guidance or professional advice.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      &copy; DIY Calculator Hub — Free tools for homeowners and DIY projects.
+    </footer>
+  </div>
+
+  <script>
+    const DOOR_AREA = 2;      // m² per door
+    const WINDOW_AREA = 1.5;  // m² per window
+    const WASTE_BUFFER = 0.10; // 10%
+
+    const form = document.getElementById('paint-form');
+    const resetBtn = document.getElementById('reset-btn');
+    const resultsPanel = document.getElementById('results-panel');
+    const errorMessage = document.getElementById('error-message');
+
+    const fields = {
+      length: document.getElementById('length'),
+      width: document.getElementById('width'),
+      height: document.getElementById('height'),
+      doors: document.getElementById('doors'),
+      windows: document.getElementById('windows'),
+      coats: document.getElementById('coats'),
+      coverage: document.getElementById('coverage'),
+    };
+
+    const outputs = {
+      wallArea: document.getElementById('result-wall-area'),
+      deduction: document.getElementById('result-deduction'),
+      netArea: document.getElementById('result-net-area'),
+      litres: document.getElementById('result-litres'),
+    };
+
+    function formatArea(value) {
+      return value.toFixed(1) + ' m²';
+    }
+
+    function formatLitres(value) {
+      return value.toFixed(2) + ' L';
+    }
+
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.classList.add('visible');
+      resultsPanel.classList.remove('visible');
+    }
+
+    function hideError() {
+      errorMessage.classList.remove('visible');
+      errorMessage.textContent = '';
+    }
+
+    function calculate() {
+      hideError();
+
+      const length = parseFloat(fields.length.value);
+      const width = parseFloat(fields.width.value);
+      const height = parseFloat(fields.height.value);
+      const doors = parseInt(fields.doors.value, 10) || 0;
+      const windows = parseInt(fields.windows.value, 10) || 0;
+      const coats = parseInt(fields.coats.value, 10);
+      const coverage = parseFloat(fields.coverage.value);
+
+      if (!length || !width || !height || length <= 0 || width <= 0 || height <= 0) {
+        showError('Please enter valid room dimensions (length, width, and height must be greater than zero).');
+        return;
+      }
+
+      if (doors < 0 || windows < 0) {
+        showError('Door and window counts cannot be negative.');
+        return;
+      }
+
+      if (!coats || coats < 1) {
+        showError('Please enter at least 1 coat of paint.');
+        return;
+      }
+
+      if (!coverage || coverage <= 0) {
+        showError('Please enter a valid paint coverage value greater than zero.');
+        return;
+      }
+
+      const totalWallArea = 2 * (length + width) * height;
+      const deduction = (doors * DOOR_AREA) + (windows * WINDOW_AREA);
+      const netPaintableArea = Math.max(0, totalWallArea - deduction);
+
+      if (netPaintableArea === 0) {
+        showError('After deducting doors and windows, there is no paintable wall area. Please check your inputs.');
+        return;
+      }
+
+      const totalCoatedArea = netPaintableArea * coats;
+      const litresBeforeBuffer = totalCoatedArea / coverage;
+      const recommendedLitres = litresBeforeBuffer * (1 + WASTE_BUFFER);
+
+      outputs.wallArea.textContent = formatArea(totalWallArea);
+      outputs.deduction.textContent = '− ' + formatArea(deduction);
+      outputs.netArea.textContent = formatArea(netPaintableArea);
+      outputs.litres.textContent = formatLitres(recommendedLitres);
+
+      resultsPanel.classList.add('visible');
+      resultsPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function resetForm() {
+      form.reset();
+      fields.doors.value = 1;
+      fields.windows.value = 1;
+      fields.coats.value = 2;
+      fields.coverage.value = 10;
+      hideError();
+      resultsPanel.classList.remove('visible');
+      fields.length.focus();
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      calculate();
+    });
+
+    resetBtn.addEventListener('click', resetForm);
+  </script>
+</body>
+</html>
