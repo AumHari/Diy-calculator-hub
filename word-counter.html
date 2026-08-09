@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Online Word & Character Counter | OMviews</title>
+    <meta name="description" content="Instant real-time word counter, character counter, sentence counter, and reading time estimator. 100% free and privacy-focused.">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 1.25rem 1rem;
+            text-align: center;
+        }
+
+        header a {
+            text-decoration: none;
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .tool-title {
+            margin-bottom: 1.5rem;
+        }
+
+        .tool-title h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .tool-title p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-card .number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1.2;
+        }
+
+        .stat-card .label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 0.25rem;
+        }
+
+        .editor-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        textarea {
+            width: 100%;
+            height: 250px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            resize: vertical;
+            outline: none;
+            color: var(--text);
+            background-color: #fafafa;
+        }
+
+        textarea:focus {
+            border-color: var(--primary);
+            background-color: #ffffff;
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--bg);
+            color: var(--text);
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html">OMviews</a>
+        <p>Simple, Fast & Free Online Utilities</p>
+    </header>
+
+    <main>
+        <a href="index.html" class="back-link">&larr; Back to Directory</a>
+
+        <div class="tool-title">
+            <h1>Word & Character Counter</h1>
+            <p>Type or paste your text below for real-time word and character statistics.</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="number" id="wordCount">0</div>
+                <div class="label">Words</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="charCount">0</div>
+                <div class="label">Characters</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="charNoSpaceCount">0</div>
+                <div class="label">No Spaces</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="sentenceCount">0</div>
+                <div class="label">Sentences</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="paragraphCount">0</div>
+                <div class="label">Paragraphs</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="readTime">0m</div>
+                <div class="label">Read Time</div>
+            </div>
+        </div>
+
+        <div class="editor-container">
+            <textarea id="textInput" placeholder="Start typing or paste your text here..."></textarea>
+            <div class="actions">
+                <button class="btn btn-secondary" onclick="clearText()">Clear</button>
+                <button class="btn" onclick="copyText()">Copy Text</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 OMviews. All rights reserved. Built for speed and simplicity.</p>
+    </footer>
+
+    <script>
+        const textInput = document.getElementById('textInput');
+        const wordCount = document.getElementById('wordCount');
+        const charCount = document.getElementById('charCount');
+        const charNoSpaceCount = document.getElementById('charNoSpaceCount');
+        const sentenceCount = document.getElementById('sentenceCount');
+        const paragraphCount = document.getElementById('paragraphCount');
+        const readTime = document.getElementById('readTime');
+
+        textInput.addEventListener('input', updateStats);
+
+        function updateStats() {
+            const text = textInput.value;
+
+            charCount.textContent = text.length;
+            charNoSpaceCount.textContent = text.replace(/\s/g, '').length;
+
+            const trimmedText = text.trim();
+            const words = trimmedText ? trimmedText.split(/\s+/).length : 0;
+            wordCount.textContent = words;
+
+            const sentences = trimmedText ? trimmedText.split(/[.!?]+/).filter(Boolean).length : 0;
+            sentenceCount.textContent = sentences;
+
+            const paragraphs = text.split(/\n+/).filter(p => p.trim().length > 0).length;
+            paragraphCount.textContent = paragraphs;
+
+            const minutes = Math.ceil(words / 200);
+            readTime.textContent = words === 0 ? '0m' : `${minutes}m`;
+        }
+
+        function clearText() {
+            textInput.value = '';
+            updateStats();
+            textInput.focus();
+        }
+
+        function copyText() {
+            if (!textInput.value) return;
+            navigator.clipboard.writeText(textInput.value).then(() => {
+                alert('Text copied to clipboard!');
+            });
+        }
+    </script>
+</body>
+</html>

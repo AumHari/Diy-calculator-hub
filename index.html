@@ -1,1007 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Paint Calculator | DIY Calculator Hub</title>
-  <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --color-bg: #f4f6f8;
-      --color-surface: #ffffff;
-      --color-primary: #2563eb;
-      --color-primary-hover: #1d4ed8;
-      --color-text: #1e293b;
-      --color-text-muted: #64748b;
-      --color-border: #e2e8f0;
-      --color-accent: #0f766e;
-      --color-accent-bg: #ecfdf5;
-      --radius: 12px;
-      --shadow: 0 4px 24px rgba(15, 23, 42, 0.08);
-      --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-
-    body {
-      font-family: var(--font);
-      background: var(--color-bg);
-      color: var(--color-text);
-      line-height: 1.6;
-      min-height: 100vh;
-    }
-
-    .container {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 1.5rem 1rem 3rem;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .brand {
-      font-size: 0.875rem;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--color-primary);
-      margin-bottom: 0.25rem;
-    }
-
-    header h1 {
-      font-size: clamp(1.75rem, 5vw, 2.25rem);
-      font-weight: 700;
-      color: var(--color-text);
-    }
-
-    header p {
-      color: var(--color-text-muted);
-      margin-top: 0.5rem;
-      font-size: 0.95rem;
-    }
-
-    .card {
-      background: var(--color-surface);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .card h2 {
-      font-size: 1.125rem;
-      font-weight: 600;
-      margin-bottom: 1.25rem;
-      padding-bottom: 0.75rem;
-      border-bottom: 1px solid var(--color-border);
-    }
-
-    /* Unit toggle */
-    .unit-toggle-wrap {
-      margin-bottom: 1.5rem;
-    }
-
-    .unit-toggle-label {
-      display: block;
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--color-text);
-      margin-bottom: 0.5rem;
-    }
-
-    .unit-toggle {
-      display: flex;
-      background: var(--color-bg);
-      border: 1px solid var(--color-border);
-      border-radius: 10px;
-      padding: 4px;
-      gap: 4px;
-    }
-
-    .unit-toggle button {
-      flex: 1;
-      min-width: 0;
-      padding: 0.6rem 0.75rem;
-      border: none;
-      border-radius: 7px;
-      background: transparent;
-      color: var(--color-text-muted);
-      font-size: 0.85rem;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-      line-height: 1.3;
-    }
-
-    @media (max-width: 400px) {
-      .unit-toggle button {
-        font-size: 0.78rem;
-        padding: 0.55rem 0.5rem;
-      }
-    }
-
-    .unit-toggle button.active {
-      background: var(--color-surface);
-      color: var(--color-primary);
-      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.1);
-    }
-
-    .unit-toggle button:not(.active):hover {
-      color: var(--color-text);
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-
-    @media (max-width: 520px) {
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 0.35rem;
-    }
-
-    .field.full-width {
-      grid-column: 1 / -1;
-    }
-
-    label {
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--color-text);
-    }
-
-    .label-hint {
-      font-weight: 400;
-      color: var(--color-text-muted);
-    }
-
-    input[type="number"] {
-      width: 100%;
-      padding: 0.65rem 0.85rem;
-      border: 1px solid var(--color-border);
-      border-radius: 8px;
-      font-size: 1rem;
-      font-family: inherit;
-      color: var(--color-text);
-      background: var(--color-surface);
-      transition: border-color 0.15s, box-shadow 0.15s;
-    }
-
-    input[type="number"]:focus {
-      outline: none;
-      border-color: var(--color-primary);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-    }
-
-    .input-group {
-      display: flex;
-      align-items: stretch;
-    }
-
-    .input-group input {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-      flex: 1;
-    }
-
-    .input-suffix {
-      display: flex;
-      align-items: center;
-      padding: 0 0.85rem;
-      background: var(--color-bg);
-      border: 1px solid var(--color-border);
-      border-left: none;
-      border-radius: 0 8px 8px 0;
-      font-size: 0.875rem;
-      color: var(--color-text-muted);
-      white-space: nowrap;
-    }
-
-    .buttons {
-      display: flex;
-      gap: 0.75rem;
-      margin-top: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    .buttons button {
-      flex: 1;
-      min-width: 140px;
-      padding: 0.75rem 1.25rem;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
-    }
-
-    .buttons button:active {
-      transform: scale(0.98);
-    }
-
-    .btn-primary {
-      background: var(--color-primary);
-      color: #fff;
-    }
-
-    .btn-primary:hover {
-      background: var(--color-primary-hover);
-    }
-
-    .btn-secondary {
-      background: var(--color-bg);
-      color: var(--color-text);
-      border: 1px solid var(--color-border);
-    }
-
-    .btn-secondary:hover {
-      background: var(--color-border);
-    }
-
-    /* Results panel with smooth reveal */
-    .results {
-      opacity: 0;
-      max-height: 0;
-      overflow: hidden;
-      margin-bottom: 0;
-      padding-top: 0;
-      padding-bottom: 0;
-      border: 1px solid transparent;
-      transition:
-        opacity 0.35s ease,
-        max-height 0.45s ease,
-        margin-bottom 0.35s ease,
-        padding 0.35s ease,
-        border-color 0.35s ease,
-        box-shadow 0.35s ease;
-      pointer-events: none;
-    }
-
-    .results.visible {
-      opacity: 1;
-      max-height: 1200px;
-      margin-bottom: 1.5rem;
-      padding: 1.5rem;
-      pointer-events: auto;
-    }
-
-    .results.updating {
-      animation: resultsPulse 0.45s ease;
-    }
-
-    @keyframes resultsPulse {
-      0%   { box-shadow: var(--shadow); }
-      40%  { box-shadow: 0 4px 32px rgba(37, 99, 235, 0.18); border-color: rgba(37, 99, 235, 0.25); }
-      100% { box-shadow: var(--shadow); border-color: transparent; }
-    }
-
-    .result-grid {
-      display: grid;
-      gap: 0.75rem;
-    }
-
-    .result-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.75rem 1rem;
-      background: var(--color-bg);
-      border-radius: 8px;
-      gap: 1rem;
-      animation: fadeSlideIn 0.4s ease both;
-    }
-
-    .result-row:nth-child(1) { animation-delay: 0.05s; }
-    .result-row:nth-child(2) { animation-delay: 0.1s; }
-    .result-row:nth-child(3) { animation-delay: 0.15s; }
-    .result-row:nth-child(4) { animation-delay: 0.2s; }
-
-    @keyframes fadeSlideIn {
-      from {
-        opacity: 0;
-        transform: translateY(6px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .result-row.highlight {
-      background: var(--color-accent-bg);
-      border: 1px solid #99f6e4;
-    }
-
-    .result-label {
-      font-size: 0.9rem;
-      color: var(--color-text-muted);
-    }
-
-    .result-value {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--color-text);
-      text-align: right;
-    }
-
-    .result-row.highlight .result-value {
-      font-size: 1.25rem;
-      color: var(--color-accent);
-    }
-
-    /* Buyer's guide */
-    .buyers-guide {
-      margin-top: 1.5rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid var(--color-border);
-      animation: fadeSlideIn 0.4s ease 0.25s both;
-    }
-
-    .buyers-guide h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 0.35rem;
-      color: var(--color-text);
-    }
-
-    .buyers-guide .guide-subtitle {
-      font-size: 0.85rem;
-      color: var(--color-text-muted);
-      margin-bottom: 1rem;
-    }
-
-    .tin-list {
-      display: grid;
-      gap: 0.6rem;
-    }
-
-    .tin-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      padding: 0.85rem 1rem;
-      background: var(--color-bg);
-      border-radius: 8px;
-      border: 1px solid var(--color-border);
-    }
-
-    .tin-item-info {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .tin-badge {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 2.5rem;
-      height: 2.5rem;
-      background: var(--color-primary);
-      color: #fff;
-      font-weight: 700;
-      font-size: 0.9rem;
-      border-radius: 8px;
-      flex-shrink: 0;
-    }
-
-    .tin-label {
-      font-size: 0.925rem;
-      font-weight: 500;
-      color: var(--color-text);
-    }
-
-    .tin-detail {
-      font-size: 0.8rem;
-      color: var(--color-text-muted);
-    }
-
-    .tin-total {
-      font-size: 0.925rem;
-      font-weight: 600;
-      color: var(--color-text);
-      text-align: right;
-      white-space: nowrap;
-    }
-
-    .buyers-summary {
-      margin-top: 1rem;
-      padding: 0.85rem 1rem;
-      background: var(--color-accent-bg);
-      border: 1px solid #99f6e4;
-      border-radius: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .buyers-summary span {
-      font-size: 0.9rem;
-      color: var(--color-text-muted);
-    }
-
-    .buyers-summary strong {
-      font-size: 1rem;
-      color: var(--color-accent);
-    }
-
-    .error-message {
-      display: none;
-      margin-top: 1rem;
-      padding: 0.75rem 1rem;
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      border-radius: 8px;
-      color: #b91c1c;
-      font-size: 0.9rem;
-    }
-
-    .error-message.visible {
-      display: block;
-    }
-
-    .info-section h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 0.75rem;
-      color: var(--color-text);
-    }
-
-    .info-section p,
-    .info-section li {
-      font-size: 0.925rem;
-      color: var(--color-text-muted);
-      margin-bottom: 0.75rem;
-    }
-
-    .info-section ul,
-    .info-section ol {
-      padding-left: 1.25rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .info-section li {
-      margin-bottom: 0.35rem;
-    }
-
-    .example-box {
-      background: var(--color-bg);
-      border-radius: 8px;
-      padding: 1rem 1.25rem;
-      font-size: 0.925rem;
-      color: var(--color-text-muted);
-      line-height: 1.7;
-    }
-
-    .example-box strong {
-      color: var(--color-text);
-    }
-
-    .disclaimer {
-      font-size: 0.85rem;
-      color: var(--color-text-muted);
-      border-left: 3px solid var(--color-border);
-      padding-left: 1rem;
-      margin-top: 0.5rem;
-    }
-
-    footer {
-      text-align: center;
-      font-size: 0.8rem;
-      color: var(--color-text-muted);
-      margin-top: 2rem;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMviews | Free Online Tools & Daily Calculators</title>
+    <meta name="description" content="Fast, free, and privacy-focused online utilities, calculators, and converters for everyday use.">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 1rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            flex: 1;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .hero h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            border-color: var(--primary);
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .card .btn {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--primary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 3rem;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
+
     <header>
-      <div class="brand">DIY Calculator Hub</div>
-      <h1>Paint Calculator</h1>
-      <p>Estimate how much paint you need for your room walls.</p>
+        <h1>OMviews</h1>
+        <p>Simple, Fast & Free Online Utilities</p>
     </header>
 
     <main>
-      <section class="card" aria-labelledby="inputs-heading">
-        <h2 id="inputs-heading">Room Details</h2>
-        <form id="paint-form" novalidate>
-          <div class="unit-toggle-wrap">
-            <span class="unit-toggle-label" id="unit-toggle-label">Measurement Units</span>
-            <div class="unit-toggle" role="group" aria-labelledby="unit-toggle-label">
-              <button type="button" class="unit-btn active" data-unit="metric" aria-pressed="true">
-                Metric (m / Litres)
-              </button>
-              <button type="button" class="unit-btn" data-unit="imperial" aria-pressed="false">
-                Imperial (ft / Gallons)
-              </button>
-            </div>
-          </div>
+        <section class="hero">
+            <h2>Web Utility Directory</h2>
+            <p>Select a tool below to get started instantly—no sign-up required.</p>
+        </section>
 
-          <div class="form-grid">
-            <div class="field">
-              <label for="length">Room Length</label>
-              <div class="input-group">
-                <input type="number" id="length" name="length" min="0" step="0.01" placeholder="e.g. 4.5" required>
-                <span class="input-suffix" id="suffix-length">m</span>
-              </div>
-            </div>
+        <section class="grid">
+            <!-- Tool 1: Paint Calculator -->
+            <a href="paint-calculator.html" class="card">
+                <div>
+                    <h3>Paint Calculator</h3>
+                    <p>Accurately estimate the amount of paint required for your room coverage.</p>
+                </div>
+                <span class="btn">Open Tool &rarr;</span>
+            </a>
 
-            <div class="field">
-              <label for="width">Room Width</label>
-              <div class="input-group">
-                <input type="number" id="width" name="width" min="0" step="0.01" placeholder="e.g. 3.2" required>
-                <span class="input-suffix" id="suffix-width">m</span>
-              </div>
-            </div>
-
-            <div class="field">
-              <label for="height">Wall Height</label>
-              <div class="input-group">
-                <input type="number" id="height" name="height" min="0" step="0.01" placeholder="e.g. 2.4" required>
-                <span class="input-suffix" id="suffix-height">m</span>
-              </div>
-            </div>
-
-            <div class="field">
-              <label for="doors">Number of Doors</label>
-              <input type="number" id="doors" name="doors" min="0" step="1" value="1">
-            </div>
-
-            <div class="field">
-              <label for="windows">Number of Windows</label>
-              <input type="number" id="windows" name="windows" min="0" step="1" value="1">
-            </div>
-
-            <div class="field">
-              <label for="coats">Number of Coats</label>
-              <input type="number" id="coats" name="coats" min="1" step="1" value="2">
-            </div>
-
-            <div class="field full-width">
-              <label for="coverage">
-                <span id="coverage-label">Paint Coverage per Litre</span>
-                <span class="label-hint" id="coverage-hint">(typical emulsion: 10 m²/L)</span>
-              </label>
-              <div class="input-group">
-                <input type="number" id="coverage" name="coverage" min="0.1" step="0.1" value="10">
-                <span class="input-suffix" id="suffix-coverage">m²/L</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="buttons">
-            <button type="submit" class="btn-primary">Calculate Paint</button>
-            <button type="button" class="btn-secondary" id="reset-btn">Reset</button>
-          </div>
-
-          <div class="error-message" id="error-message" role="alert"></div>
-        </form>
-      </section>
-
-      <section class="card results" id="results-panel" aria-labelledby="results-heading" aria-live="polite">
-        <h2 id="results-heading">Your Estimate</h2>
-        <div class="result-grid">
-          <div class="result-row">
-            <span class="result-label">Total Wall Area</span>
-            <span class="result-value" id="result-wall-area">—</span>
-          </div>
-          <div class="result-row">
-            <span class="result-label">Deduction for Doors / Windows</span>
-            <span class="result-value" id="result-deduction">—</span>
-          </div>
-          <div class="result-row">
-            <span class="result-label">Net Paintable Area</span>
-            <span class="result-value" id="result-net-area">—</span>
-          </div>
-          <div class="result-row highlight">
-            <span class="result-label" id="result-paint-label">Total Recommended Litres of Paint</span>
-            <span class="result-value" id="result-paint-amount">—</span>
-          </div>
-        </div>
-
-        <div class="buyers-guide" id="buyers-guide">
-          <h3>Paint Can Buyer's Guide</h3>
-          <p class="guide-subtitle" id="guide-subtitle">Standard tin sizes to buy at the store</p>
-          <div class="tin-list" id="tin-list"></div>
-          <div class="buyers-summary" id="buyers-summary">
-            <span>Total purchased</span>
-            <strong id="buyers-total">—</strong>
-          </div>
-        </div>
-      </section>
-
-      <section class="card info-section">
-        <h3>How this calculator works</h3>
-        <p>This tool estimates the amount of paint needed to cover the walls of a rectangular room. It follows these steps:</p>
-        <ol>
-          <li><strong>Calculate total wall area</strong> — For a rectangular room, the four walls add up to: 2 × (Length + Width) × Height.</li>
-          <li><strong>Subtract openings</strong> — Each door and window area is deducted from the total wall area (2 m² / 21 sq ft per door, 1.5 m² / 16 sq ft per window).</li>
-          <li><strong>Account for multiple coats</strong> — The net paintable area is multiplied by the number of coats you plan to apply.</li>
-          <li><strong>Convert to volume</strong> — The total coated area is divided by the paint's coverage rate.</li>
-          <li><strong>Add a waste buffer</strong> — A 10% extra allowance is added to cover spills, touch-ups, and uneven surfaces.</li>
-        </ol>
-      </section>
-
-      <section class="card info-section">
-        <h3>Worked example</h3>
-        <div class="example-box">
-          <p>Suppose you have a room that is <strong>4 m long</strong>, <strong>3 m wide</strong>, and <strong>2.4 m high</strong>, with <strong>1 door</strong>, <strong>1 window</strong>, applying <strong>2 coats</strong> of paint with a coverage of <strong>10 m²/L</strong>:</p>
-          <ul>
-            <li>Total wall area = 2 × (4 + 3) × 2.4 = <strong>33.6 m²</strong></li>
-            <li>Deductions = (1 × 2) + (1 × 1.5) = <strong>3.5 m²</strong></li>
-            <li>Net paintable area = 33.6 − 3.5 = <strong>30.1 m²</strong></li>
-            <li>Total coated area = 30.1 × 2 coats = <strong>60.2 m²</strong></li>
-            <li>Litres before buffer = 60.2 ÷ 10 = <strong>6.02 L</strong></li>
-            <li>With 10% buffer = 6.02 × 1.10 = <strong>6.62 L</strong> (see Buyer's Guide for tin sizes)</li>
-          </ul>
-        </div>
-      </section>
-
-      <section class="card info-section">
-        <h3>Disclaimer</h3>
-        <p class="disclaimer">
-          Paint coverage varies significantly between brands, finishes (matte, satin, gloss), and surface types (new plaster, previously painted, textured walls). Always check the coverage figure on your chosen paint tin and consider buying slightly more than calculated. This calculator provides an estimate only and should not replace manufacturer guidance or professional advice.
-        </p>
-      </section>
+            <!-- Tool 2: Word Counter -->
+            <a href="word-counter.html" class="card">
+                <div>
+                    <h3>Word & Character Counter</h3>
+                    <p>Count words, characters, sentences, and paragraphs in real time.</p>
+                </div>
+                <span class="btn">Open Tool &rarr;</span>
+            </a>
+        </section>
     </main>
 
     <footer>
-      &copy; DIY Calculator Hub — Free tools for homeowners and DIY projects.
+        <p>&copy; 2026 OMviews. All rights reserved. Built for speed and simplicity.</p>
     </footer>
-  </div>
 
-  <script>
-    const M_TO_FT = 3.28084;
-    const SQFT_PER_SQM = 10.7639;
-    const LITRES_PER_GALLON = 3.78541;
-    const WASTE_BUFFER = 0.10;
-
-    const UNITS = {
-      metric: {
-        lengthSuffix: 'm',
-        areaSuffix: 'm²',
-        coverageSuffix: 'm²/L',
-        volumeSuffix: 'L',
-        volumeLabel: 'Litres',
-        doorArea: 2,
-        windowArea: 1.5,
-        defaultCoverage: 10,
-        coverageLabel: 'Paint Coverage per Litre',
-        coverageHint: '(typical emulsion: 10 m²/L)',
-        paintResultLabel: 'Total Recommended Litres of Paint',
-        placeholders: { length: 'e.g. 4.5', width: 'e.g. 3.2', height: 'e.g. 2.4' },
-        tinSizes: [
-          { size: 5,   label: '5 L tin',   short: '5L' },
-          { size: 2.5, label: '2.5 L tin', short: '2.5L' },
-          { size: 1,   label: '1 L tin',   short: '1L' },
-        ],
-      },
-      imperial: {
-        lengthSuffix: 'ft',
-        areaSuffix: 'sq ft',
-        coverageSuffix: 'sq ft/gal',
-        volumeSuffix: 'gal',
-        volumeLabel: 'Gallons',
-        doorArea: 21,
-        windowArea: 16,
-        defaultCoverage: 400,
-        coverageLabel: 'Paint Coverage per Gallon',
-        coverageHint: '(typical emulsion: 400 sq ft/gal)',
-        paintResultLabel: 'Total Recommended Gallons of Paint',
-        placeholders: { length: 'e.g. 14.8', width: 'e.g. 10.5', height: 'e.g. 8' },
-        tinSizes: [
-          { size: 5, label: '5 Gallon bucket', short: '5 gal' },
-          { size: 1, label: '1 Gallon tin',    short: '1 gal' },
-        ],
-      },
-    };
-
-    let currentUnit = 'metric';
-
-    const form = document.getElementById('paint-form');
-    const resetBtn = document.getElementById('reset-btn');
-    const resultsPanel = document.getElementById('results-panel');
-    const errorMessage = document.getElementById('error-message');
-    const unitButtons = document.querySelectorAll('.unit-btn');
-    const tinList = document.getElementById('tin-list');
-
-    const fields = {
-      length: document.getElementById('length'),
-      width: document.getElementById('width'),
-      height: document.getElementById('height'),
-      doors: document.getElementById('doors'),
-      windows: document.getElementById('windows'),
-      coats: document.getElementById('coats'),
-      coverage: document.getElementById('coverage'),
-    };
-
-    const outputs = {
-      wallArea: document.getElementById('result-wall-area'),
-      deduction: document.getElementById('result-deduction'),
-      netArea: document.getElementById('result-net-area'),
-      paintLabel: document.getElementById('result-paint-label'),
-      paintAmount: document.getElementById('result-paint-amount'),
-      buyersTotal: document.getElementById('buyers-total'),
-    };
-
-    const ui = {
-      suffixLength: document.getElementById('suffix-length'),
-      suffixWidth: document.getElementById('suffix-width'),
-      suffixHeight: document.getElementById('suffix-height'),
-      suffixCoverage: document.getElementById('suffix-coverage'),
-      coverageLabel: document.getElementById('coverage-label'),
-      coverageHint: document.getElementById('coverage-hint'),
-    };
-
-    function getConfig() {
-      return UNITS[currentUnit];
-    }
-
-    function formatArea(value) {
-      return value.toFixed(1) + ' ' + getConfig().areaSuffix;
-    }
-
-    function formatVolume(value) {
-      const cfg = getConfig();
-      const decimals = currentUnit === 'metric' ? 2 : 2;
-      return value.toFixed(decimals) + ' ' + cfg.volumeSuffix;
-    }
-
-    function convertLength(value, from, to) {
-      if (from === to) return value;
-      return from === 'metric' ? value * M_TO_FT : value / M_TO_FT;
-    }
-
-    function convertCoverage(value, from, to) {
-      if (from === to) return value;
-      if (from === 'metric') {
-        // m²/L → sq ft/gal
-        return value * SQFT_PER_SQM * LITRES_PER_GALLON;
-      }
-      // sq ft/gal → m²/L
-      return value / (SQFT_PER_SQM * LITRES_PER_GALLON);
-    }
-
-    function calculateTins(required, tinSizes) {
-      const sorted = [...tinSizes].sort((a, b) => b.size - a.size);
-      const breakdown = sorted.map(function (tin) {
-        return { tin: tin, count: 0 };
-      });
-
-      let remaining = required;
-
-      for (let i = 0; i < sorted.length; i++) {
-        const count = Math.floor(remaining / sorted[i].size);
-        if (count > 0) {
-          breakdown[i].count = count;
-          remaining -= count * sorted[i].size;
-        }
-      }
-
-      if (remaining > 0) {
-        const smallest = breakdown[breakdown.length - 1];
-        smallest.count += 1;
-      }
-
-      return breakdown.filter(function (item) { return item.count > 0; });
-    }
-
-    function renderBuyersGuide(requiredVolume) {
-      const cfg = getConfig();
-      const breakdown = calculateTins(requiredVolume, cfg.tinSizes);
-
-      tinList.innerHTML = '';
-
-      let totalVolume = 0;
-      let totalTins = 0;
-
-      breakdown.forEach(function (item) {
-        const volume = item.count * item.tin.size;
-        totalVolume += volume;
-        totalTins += item.count;
-
-        const el = document.createElement('div');
-        el.className = 'tin-item';
-        el.innerHTML =
-          '<div class="tin-item-info">' +
-            '<div class="tin-badge" aria-hidden="true">' + item.count + '×</div>' +
-            '<div>' +
-              '<div class="tin-label">' + item.tin.label + '</div>' +
-              '<div class="tin-detail">' + formatVolume(item.tin.size) + ' each</div>' +
-            '</div>' +
-          '</div>' +
-          '<div class="tin-total">' + formatVolume(volume) + '</div>';
-
-        tinList.appendChild(el);
-      });
-
-      outputs.buyersTotal.textContent =
-        totalTins + ' tin' + (totalTins !== 1 ? 's' : '') +
-        ' (' + formatVolume(totalVolume) + ' total)';
-    }
-
-    function updateUnitUI() {
-      const cfg = getConfig();
-
-      ui.suffixLength.textContent = cfg.lengthSuffix;
-      ui.suffixWidth.textContent = cfg.lengthSuffix;
-      ui.suffixHeight.textContent = cfg.lengthSuffix;
-      ui.suffixCoverage.textContent = cfg.coverageSuffix;
-      ui.coverageLabel.textContent = cfg.coverageLabel;
-      ui.coverageHint.textContent = cfg.coverageHint;
-      outputs.paintLabel.textContent = cfg.paintResultLabel;
-
-      fields.length.placeholder = cfg.placeholders.length;
-      fields.width.placeholder = cfg.placeholders.width;
-      fields.height.placeholder = cfg.placeholders.height;
-    }
-
-    function switchUnit(newUnit) {
-      if (newUnit === currentUnit) return;
-
-      const oldUnit = currentUnit;
-      currentUnit = newUnit;
-
-      unitButtons.forEach(function (btn) {
-        const isActive = btn.dataset.unit === newUnit;
-        btn.classList.toggle('active', isActive);
-        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-      });
-
-      ['length', 'width', 'height'].forEach(function (key) {
-        const val = parseFloat(fields[key].value);
-        if (val > 0) {
-          fields[key].value = convertLength(val, oldUnit, newUnit).toFixed(2);
-        }
-      });
-
-      const cov = parseFloat(fields.coverage.value);
-      const newCfg = UNITS[newUnit];
-      if (cov > 0) {
-        fields.coverage.value = convertCoverage(cov, oldUnit, newUnit).toFixed(
-          newUnit === 'metric' ? 1 : 0
-        );
-      } else {
-        fields.coverage.value = newCfg.defaultCoverage;
-      }
-
-      updateUnitUI();
-
-      if (resultsPanel.classList.contains('visible')) {
-        calculate(true);
-      }
-    }
-
-    function showError(message) {
-      errorMessage.textContent = message;
-      errorMessage.classList.add('visible');
-      resultsPanel.classList.remove('visible', 'updating');
-    }
-
-    function hideError() {
-      errorMessage.classList.remove('visible');
-      errorMessage.textContent = '';
-    }
-
-    function showResults(isUpdate) {
-      if (isUpdate && resultsPanel.classList.contains('visible')) {
-        resultsPanel.classList.remove('updating');
-        void resultsPanel.offsetWidth;
-        resultsPanel.classList.add('updating');
-      } else {
-        resultsPanel.classList.add('visible');
-        resultsPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
-    }
-
-    function calculate(isUpdate) {
-      hideError();
-
-      const cfg = getConfig();
-      const length = parseFloat(fields.length.value);
-      const width = parseFloat(fields.width.value);
-      const height = parseFloat(fields.height.value);
-      const doors = parseInt(fields.doors.value, 10) || 0;
-      const windows = parseInt(fields.windows.value, 10) || 0;
-      const coats = parseInt(fields.coats.value, 10);
-      const coverage = parseFloat(fields.coverage.value);
-
-      if (!length || !width || !height || length <= 0 || width <= 0 || height <= 0) {
-        showError('Please enter valid room dimensions (length, width, and height must be greater than zero).');
-        return;
-      }
-
-      if (doors < 0 || windows < 0) {
-        showError('Door and window counts cannot be negative.');
-        return;
-      }
-
-      if (!coats || coats < 1) {
-        showError('Please enter at least 1 coat of paint.');
-        return;
-      }
-
-      if (!coverage || coverage <= 0) {
-        showError('Please enter a valid paint coverage value greater than zero.');
-        return;
-      }
-
-      const totalWallArea = 2 * (length + width) * height;
-      const deduction = (doors * cfg.doorArea) + (windows * cfg.windowArea);
-      const netPaintableArea = Math.max(0, totalWallArea - deduction);
-
-      if (netPaintableArea === 0) {
-        showError('After deducting doors and windows, there is no paintable wall area. Please check your inputs.');
-        return;
-      }
-
-      const totalCoatedArea = netPaintableArea * coats;
-      const volumeBeforeBuffer = totalCoatedArea / coverage;
-      const recommendedVolume = volumeBeforeBuffer * (1 + WASTE_BUFFER);
-
-      outputs.wallArea.textContent = formatArea(totalWallArea);
-      outputs.deduction.textContent = '− ' + formatArea(deduction);
-      outputs.netArea.textContent = formatArea(netPaintableArea);
-      outputs.paintAmount.textContent = formatVolume(recommendedVolume);
-
-      renderBuyersGuide(recommendedVolume);
-      showResults(isUpdate);
-    }
-
-    function resetForm() {
-      currentUnit = 'metric';
-      unitButtons.forEach(function (btn) {
-        const isActive = btn.dataset.unit === 'metric';
-        btn.classList.toggle('active', isActive);
-        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-      });
-
-      form.reset();
-      fields.doors.value = 1;
-      fields.windows.value = 1;
-      fields.coats.value = 2;
-      fields.coverage.value = UNITS.metric.defaultCoverage;
-      updateUnitUI();
-      hideError();
-      resultsPanel.classList.remove('visible', 'updating');
-      tinList.innerHTML = '';
-      fields.length.focus();
-    }
-
-    unitButtons.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        switchUnit(btn.dataset.unit);
-      });
-    });
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      calculate(false);
-    });
-
-    resetBtn.addEventListener('click', resetForm);
-
-    updateUnitUI();
-  </script>
 </body>
 </html>
