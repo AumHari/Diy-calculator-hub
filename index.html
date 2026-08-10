@@ -1,173 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OMviews | Free Online Tools & Daily Calculators</title>
-    <meta name="description" content="Fast, free, and privacy-focused online utilities, calculators, and converters for everyday use.">
-    <style>
-        :root {
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text: #0f172a;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OMviews | Free Fast Online Utilities & Calculators</title>
+  <meta name="description" content="Fast, free, and privacy-focused online utilities, calculators, and converters for everyday use. No sign-up required.">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.05);
+      --shadow-hover: 0 10px 15px -3px rgba(79, 70, 229, 0.12), 0 4px 6px -4px rgba(79, 70, 229, 0.1);
+    }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
 
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+    body { background-color: var(--bg); color: var(--text); line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
 
-        header {
-            background-color: var(--card-bg);
-            border-bottom: 1px solid var(--border);
-            padding: 1.5rem 1rem;
-            text-align: center;
-        }
+    /* Header / Hero */
+    header { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; padding: 60px 20px; text-align: center; }
+    .hero-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.025em; }
+    .hero-subtitle { font-size: 1.15rem; opacity: 0.9; max-width: 600px; margin: 0 auto; font-weight: 400; }
 
-        header h1 {
-            font-size: 1.8rem;
-            color: var(--primary);
-            margin-bottom: 0.25rem;
-        }
+    /* Main Container */
+    main { max-width: 1100px; width: 100%; margin: -30px auto 60px; padding: 0 20px; flex: 1; }
 
-        header p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
+    .section-title { font-size: 1.25rem; font-weight: 700; color: var(--text-muted); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; }
 
-        main {
-            max-width: 1000px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-            flex: 1;
-        }
+    /* Grid Layout */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
 
-        .hero {
-            text-align: center;
-            margin-bottom: 2.5rem;
-        }
+    /* Cards */
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 28px; text-decoration: none; color: inherit; transition: all 0.25s ease; box-shadow: var(--shadow); display: flex; flex-direction: column; justify-content: space-between; }
+    .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: #c7d2fe; }
 
-        .hero h2 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
+    .card-tag { display: inline-block; font-size: 0.75rem; font-weight: 700; color: var(--primary); background: #e0e7ff; padding: 4px 10px; border-radius: 9999px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.05em; align-self: flex-start; }
+    .card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+    .card p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
+    .card .btn { font-size: 0.95rem; font-weight: 600; color: var(--primary); display: inline-flex; align-items: center; gap: 6px; }
+    .card:hover .btn { color: var(--primary-hover); text-decoration: underline; }
 
-        .hero p {
-            color: var(--text-muted);
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1.5rem;
-            text-decoration: none;
-            color: inherit;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-            border-color: var(--primary);
-        }
-
-        .card h3 {
-            font-size: 1.2rem;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .card p {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-        }
-
-        .card .btn {
-            font-weight: 600;
-            font-size: 0.85rem;
-            color: var(--primary);
-        }
-
-        footer {
-            text-align: center;
-            padding: 1.5rem;
-            background-color: var(--card-bg);
-            border-top: 1px solid var(--border);
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            margin-top: 3rem;
-        }
-    </style>
+    /* Footer */
+    footer { background: #ffffff; border-top: 1px solid var(--border); padding: 30px 20px; text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-top: auto; }
+    footer nav a { color: var(--text-muted); margin: 0 12px; text-decoration: none; font-weight: 500; }
+    footer nav a:hover { color: var(--primary); text-decoration: underline; }
+  </style>
 </head>
 <body>
 
-    <header>
-        <h1>OMviews</h1>
-        <p>Simple, Fast & Free Online Utilities</p>
-    </header>
+  <header>
+    <h1 class="hero-title">OMviews</h1>
+    <p class="hero-subtitle">Simple, Fast & Free Online Utilities for Everyday Tasks</p>
+  </header>
 
-    <main>
-        <section class="hero">
-            <h2>Web Utility Directory</h2>
-            <p>Select a tool below to get started instantly—no sign-up required.</p>
-        </section>
-
-        <section class="grid">
-            <!-- Tool 1: Paint Calculator -->
-            <a href="paint-calculator.html" class="card">
-                <div>
-                    <h3>Paint Calculator</h3>
-                    <p>Accurately estimate the amount of paint required for your room coverage.</p>
-                </div>
-                <span class="btn">Open Tool &rarr;</span>
-            </a>
-
-            <!-- Tool 2: Word Counter -->
-            <a href="word-counter.html" class="card">
-                <div>
-                    <h3>Word & Character Counter</h3>
-                    <p>Count words, characters, sentences, and paragraphs in real time.</p>
-                </div>
-                <span class="btn">Open Tool &rarr;</span>
-            </a>
-        </section>
-    </main>
-
-    <footer style="margin-top: 50px; padding: 20px 0; text-align: center; border-top: 1px solid #e2e8f0; font-size: 0.9rem; color: #64748b;">
-        <nav>
-          <a href="privacy-policy.html" style="color: #64748b; margin: 0 10px; text-decoration: none;">Privacy Policy</a> |
-          <a href="terms.html" style="color: #64748b; margin: 0 10px; text-decoration: none;">Terms of Service</a> |
-          <a href="contact.html" style="color: #64748b; margin: 0 10px; text-decoration: none;">Contact Us</a>
-        </nav>
-        <p style="margin-top: 10px;">&copy; 2026 OMviews. All rights reserved.</p>
-      </footer>
+  <main>
+    <div class="grid">
       
+      <!-- Tool 1 -->
+      <a href="paint-calculator.html" class="card">
+        <div>
+          <span class="card-tag">Home Improvement</span>
+          <h3>Paint Calculator</h3>
+          <p>Accurately estimate the total paint required for room coverage in metric or imperial units.</p>
+        </div>
+        <span class="btn">Open Calculator &rarr;</span>
+      </a>
+
+      <!-- Tool 2 -->
+      <a href="word-counter.html" class="card">
+        <div>
+          <span class="card-tag">Writing & Text</span>
+          <h3>Word & Character Counter</h3>
+          <p>Count words, characters, sentences, and estimated reading time in real time as you type.</p>
+        </div>
+        <span class="btn">Open Tool &rarr;</span>
+      </a>
+
+      <!-- Tool 3 (New) -->
+      <a href="percentage-calculator.html" class="card">
+        <div>
+          <span class="card-tag">Finance & Math</span>
+          <h3>Percentage Calculator</h3>
+          <p>Quickly calculate discounts, percentage changes, increases, and proportions in seconds.</p>
+        </div>
+        <span class="btn">Open Calculator &rarr;</span>
+      </a>
+
+      <!-- Tool 4 (New) -->
+      <a href="case-converter.html" class="card">
+        <div>
+          <span class="card-tag">Writing & Formatting</span>
+          <h3>Text Case Converter</h3>
+          <p>Instantly convert text between UPPERCASE, lowercase, Title Case, and Sentence case.</p>
+        </div>
+        <span class="btn">Open Tool &rarr;</span>
+      </a>
+
+      <!-- Tool 5 (New) -->
+      <a href="tip-calculator.html" class="card">
+        <div>
+          <span class="card-tag">Daily Utility</span>
+          <h3>Tip & Bill Splitter</h3>
+          <p>Calculate tip amounts and split restaurant or service bills evenly between groups.</p>
+        </div>
+        <span class="btn">Open Calculator &rarr;</span>
+      </a>
+
+    </div>
+  </main>
+
+  <footer>
+    <nav>
+      <a href="privacy-policy.html">Privacy Policy</a> |
+      <a href="terms.html">Terms of Service</a> |
+      <a href="contact.html">Contact Us</a>
+    </nav>
+    <p style="margin-top: 12px;">&copy; 2026 OMviews. All rights reserved.</p>
+  </footer>
 
 </body>
 </html>
