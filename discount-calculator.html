@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discount Calculator - OMviews</title>
+  <style>
+    :root { --primary: #4f46e5; --bg: #f8fafc; --card: #ffffff; --text: #0f172a; --muted: #64748b; --border: #e2e8f0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+    header { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; padding: 40px 20px; text-align: center; }
+    header a { color: white; text-decoration: none; font-size: 0.9rem; opacity: 0.9; }
+    main { max-width: 600px; width: 100%; margin: -20px auto 40px; padding: 0 20px; flex: 1; }
+    .calc-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 30px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.95rem; }
+    input { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; outline: none; }
+    button { width: 100%; background: var(--primary); color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 600; font-size: 1rem; cursor: pointer; margin-top: 10px; }
+    button:hover { background: #4338ca; }
+    .result { margin-top: 24px; padding: 16px; background: #e0e7ff; border-radius: 8px; text-align: center; font-size: 1.1rem; font-weight: 700; color: var(--primary); display: none; }
+    footer { background: #fff; border-top: 1px solid var(--border); padding: 20px; text-align: center; color: var(--muted); font-size: 0.9rem; margin-top: auto; }
+    footer a { color: var(--muted); text-decoration: none; margin: 0 10px; }
+  </style>
+</head>
+<body>
+  <header>
+    <p><a href="index.html">&larr; Back to Directory</a></p>
+    <h1 style="margin-top: 10px;">Discount Calculator</h1>
+  </header>
+  <main>
+    <div class="calc-card">
+      <div class="form-group">
+        <label for="price">Original Price ($)</label>
+        <input type="number" id="price" placeholder="e.g. 50">
+      </div>
+      <div class="form-group">
+        <label for="discount">Discount (% off)</label>
+        <input type="number" id="discount" placeholder="e.g. 20">
+      </div>
+      <button onclick="calculateDiscount()">Calculate Savings</button>
+      <div id="result" class="result"></div>
+    </div>
+  </main>
+  <footer>
+    <a href="privacy-policy.html">Privacy Policy</a> | <a href="terms.html">Terms</a> | <a href="contact.html">Contact</a>
+  </footer>
+  <script>
+    function calculateDiscount() {
+      const price = parseFloat(document.getElementById('price').value);
+      const discount = parseFloat(document.getElementById('discount').value);
+      if (isNaN(price) || isNaN(discount)) return;
+
+      const saved = price * (discount / 100);
+      const finalPrice = price - saved;
+
+      const resDiv = document.getElementById('result');
+      resDiv.innerHTML = `You Save: $${saved.toFixed(2)}<br><span style="font-size:1.3rem;">Final Price: $${finalPrice.toFixed(2)}</span>`;
+      resDiv.style.display = 'block';
+    }
+  </script>
+</body>
+</html>
